@@ -13,9 +13,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 
-# ─────────────────────────────────────────────
 # Circuit Breaker Implementation
-# ─────────────────────────────────────────────
 
 class CircuitState(Enum):
     CLOSED = "CLOSED"       # Normal operation — requests pass through
@@ -117,9 +115,7 @@ class CircuitBreaker:
         }
 
 
-# ─────────────────────────────────────────────
 # Simulated LLM client
-# ─────────────────────────────────────────────
 
 # Controls injected by the test suite
 LLM_SHOULD_FAIL = False
@@ -144,9 +140,7 @@ async def call_llm_api(prompt: str) -> dict:
     }
 
 
-# ─────────────────────────────────────────────
 # App setup
-# ─────────────────────────────────────────────
 
 app = FastAPI(
     title="StudySync API",
@@ -179,9 +173,7 @@ LLM_FALLBACK = {
 }
 
 
-# ─────────────────────────────────────────────
 # Middleware: inject X-Student-ID on every response
-# ─────────────────────────────────────────────
 
 @app.middleware("http")
 async def add_student_id_header(request: Request, call_next):
@@ -190,9 +182,7 @@ async def add_student_id_header(request: Request, call_next):
     return response
 
 
-# ─────────────────────────────────────────────
 # Routes
-# ─────────────────────────────────────────────
 
 @app.get("/", tags=["health"])
 async def root():
@@ -228,9 +218,7 @@ async def circuit_reset():
     return {"message": "Circuit breaker reset to CLOSED"}
 
 
-# ─────────────────────────────────────────────
 # Test-control endpoints (used by the test script)
-# ─────────────────────────────────────────────
 
 @app.post("/test/llm/fail", tags=["test-control"])
 async def set_llm_fail():
